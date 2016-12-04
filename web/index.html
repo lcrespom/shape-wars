@@ -8,8 +8,17 @@
 	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<script src="bundle.js"></script>
 	<style>
+		body {
+			font-family: sans-serif;
+			background: #333;
+			color: white;
+		}
 		#main {
 			text-align: center;
+		}
+		#info {
+			width: 480px;
+			display: inline-block;
 		}
 		#game-canvas {
 			margin: 10px;
@@ -26,6 +35,15 @@
 	<div id="main">
 		<canvas id="game-canvas">
 		</canvas>
+		<br>
+		<div id="info">
+			<span style="float: left">
+				FPS: <span id="fps"></span>
+			</span>
+			<span style="float: right">
+				CPU: <span id="cpu"></span> %
+			</span>
+		</div>
 	</div>
 </body>
 </html>

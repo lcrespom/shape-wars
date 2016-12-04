@@ -11,6 +11,8 @@ interface Game {
 	canvas: HTMLCanvasElement;
 	gc: CanvasRenderingContext2D;
 	time: number;
+	fps: number;
+	cpu: number;
 }
 
 
@@ -27,7 +29,9 @@ function gameSetup(): Game {
 		},
 		canvas,
 		gc: ctx,
-		time: Date.now()
+		time: Date.now(),
+		fps: 0,
+		cpu: 0
 	};
 }
 
@@ -37,10 +41,26 @@ function gameStep(game: Game) {
 		game.elements[key].step(game);
 }
 
+let fpsCT = 0;
+
+function gameTiming(game: Game, tBefore: number) {
+	let now = Date.now();
+	let elapsed = now - game.time;
+	game.time = now;
+	game.fps = 1000 / elapsed;
+	game.cpu = (now - tBefore) / elapsed;
+	if ((++fpsCT) == 25) {
+		fpsCT = 0;
+		$('#fps').text(Math.round(game.fps));
+		$('#cpu').text(Math.round(game.cpu * 100));
+	}
+}
+
 function gameLoop(game: Game) {
 	window.requestAnimationFrame(_ => {
-		//ToDo: measure FPS
+		let tBefore = Date.now();
 		gameStep(game);
+		gameTiming(game, tBefore);
 		gameLoop(game);
 	});
 }

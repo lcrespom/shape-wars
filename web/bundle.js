@@ -13,7 +13,9 @@ function gameSetup() {
         },
         canvas: canvas,
         gc: ctx,
-        time: Date.now()
+        time: Date.now(),
+        fps: 0,
+        cpu: 0
     };
 }
 function gameStep(game) {
@@ -23,10 +25,24 @@ function gameStep(game) {
         game.elements[key].step(game);
     }
 }
+var fpsCT = 0;
+function gameTiming(game, tBefore) {
+    var now = Date.now();
+    var elapsed = now - game.time;
+    game.time = now;
+    game.fps = 1000 / elapsed;
+    game.cpu = (now - tBefore) / elapsed;
+    if ((++fpsCT) == 25) {
+        fpsCT = 0;
+        $('#fps').text(Math.round(game.fps));
+        $('#cpu').text(Math.round(game.cpu * 100));
+    }
+}
 function gameLoop(game) {
     window.requestAnimationFrame(function (_) {
-        //ToDo: measure FPS
+        var tBefore = Date.now();
         gameStep(game);
+        gameTiming(game, tBefore);
         gameLoop(game);
     });
 }
@@ -62,7 +78,6 @@ function setupStars(canvas, gc) {
         step: function () {
             for (var _i = 0, _a = this.stars; _i < _a.length; _i++) {
                 var star = _a[_i];
-                var f = 255 << 0;
                 this.drawStar(star);
                 star.y += star.speed;
                 if (star.y > canvas.height)
