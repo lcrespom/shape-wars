@@ -1,3 +1,5 @@
+import { Game } from './game';
+
 const NUM_STARS = 150;
 
 interface Star {
@@ -7,7 +9,7 @@ interface Star {
 	r: number;
 	g: number;
 	b: number;
-	//ToDo: twinkle period, twinkle position
+	// ToDo: twinkle period, twinkle position
 }
 
 
@@ -31,17 +33,17 @@ function initStars(w: number, h: number): Star[] {
 	return stars;
 }
 
-export function setupStars(canvas: HTMLCanvasElement, gc: CanvasRenderingContext2D) {
+export function setupStars(canvas: HTMLCanvasElement) {
 	return {
 		stars: initStars(canvas.width, canvas.height),
-		drawStar(star: Star) {
+		drawStar(gc: CanvasRenderingContext2D, star: Star) {
 			gc.fillStyle = `rgb(${star.r}, ${star.g}, ${star.b})`;
 			gc.fillRect(star.x, star.y, 2, 1);
 		},
-		step() {
+		step(game: Game) {
 			for (let star of this.stars) {
-				this.drawStar(star);
-				star.y += star.speed;
+				this.drawStar(game.gc, star);
+				star.y += star.speed * game.elements.ship.speed;
 				if (star.y > canvas.height)
 					initStar(canvas.width, canvas.height, star);
 			}

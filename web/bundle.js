@@ -1,16 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
-var stars_1 = require('./stars');
-/*-------------------- Main game engine --------------------*/
 function gameSetup() {
     var canvas = $('#game-canvas')[0];
     var ctx = canvas.getContext('2d');
     if (!ctx)
         throw Error('Could not setup canvas');
     return {
-        elements: {
-            stars: stars_1.setupStars(canvas, ctx)
-        },
+        elements: {},
         canvas: canvas,
         gc: ctx,
         time: Date.now(),
@@ -18,6 +14,7 @@ function gameSetup() {
         cpu: 0
     };
 }
+exports.gameSetup = gameSetup;
 function gameStep(game) {
     game.gc.clearRect(0, 0, game.canvas.width, game.canvas.height);
     for (var _i = 0, _a = Object.keys(game.elements); _i < _a.length; _i++) {
@@ -46,12 +43,34 @@ function gameLoop(game) {
         gameLoop(game);
     });
 }
+exports.gameLoop = gameLoop;
+
+},{}],2:[function(require,module,exports){
+"use strict";
+var game_1 = require('./game');
+var stars_1 = require('./stars');
+var ship_1 = require('./ship');
+function initGame() {
+    var game = game_1.gameSetup();
+    game.elements.stars = stars_1.setupStars(game.canvas);
+    game.elements.ship = ship_1.setupShip();
+    return game;
+}
 $(function () {
-    var game = gameSetup();
-    gameLoop(game);
+    game_1.gameLoop(initGame());
 });
 
-},{"./stars":2}],2:[function(require,module,exports){
+},{"./game":1,"./ship":3,"./stars":4}],3:[function(require,module,exports){
+"use strict";
+function setupShip() {
+    return {
+        speed: 0.5,
+        step: function (game) { }
+    };
+}
+exports.setupShip = setupShip;
+
+},{}],4:[function(require,module,exports){
 "use strict";
 var NUM_STARS = 150;
 function initStar(w, h, str) {
@@ -73,18 +92,18 @@ function initStars(w, h) {
     }
     return stars;
 }
-function setupStars(canvas, gc) {
+function setupStars(canvas) {
     return {
         stars: initStars(canvas.width, canvas.height),
-        drawStar: function (star) {
+        drawStar: function (gc, star) {
             gc.fillStyle = "rgb(" + star.r + ", " + star.g + ", " + star.b + ")";
             gc.fillRect(star.x, star.y, 2, 1);
         },
-        step: function () {
+        step: function (game) {
             for (var _i = 0, _a = this.stars; _i < _a.length; _i++) {
                 var star = _a[_i];
-                this.drawStar(star);
-                star.y += star.speed;
+                this.drawStar(game.gc, star);
+                star.y += star.speed * game.elements.ship.speed;
                 if (star.y > canvas.height)
                     initStar(canvas.width, canvas.height, star);
             }
@@ -93,5 +112,5 @@ function setupStars(canvas, gc) {
 }
 exports.setupStars = setupStars;
 
-},{}]},{},[1])
+},{}]},{},[2])
 //# sourceMappingURL=bundle.js.map
