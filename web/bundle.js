@@ -53,12 +53,17 @@ $(function () {
 
 },{"./stars":2}],2:[function(require,module,exports){
 "use strict";
-var NUM_STARS = 100;
-function initStar(w, h, star) {
-    if (star === void 0) { star = { x: 0, y: 0, speed: 0 }; }
+var NUM_STARS = 150;
+function initStar(w, h, str) {
+    if (str === void 0) { str = { y: 0 }; }
+    var star = str;
     star.x = Math.random() * w;
     star.y = star.y > 0 ? 0 : Math.random() * h;
     star.speed = 0.1 + Math.random() * 0.9;
+    var randomColor = function () { return Math.round(64 + 191 * Math.random() * star.speed); };
+    star.r = randomColor();
+    star.g = randomColor();
+    star.b = randomColor();
     return star;
 }
 function initStars(w, h) {
@@ -72,8 +77,8 @@ function setupStars(canvas, gc) {
     return {
         stars: initStars(canvas.width, canvas.height),
         drawStar: function (star) {
-            gc.fillStyle = "rgb(255, 255, 255)";
-            gc.fillRect(star.x, star.y, 1, 1);
+            gc.fillStyle = "rgb(" + star.r + ", " + star.g + ", " + star.b + ")";
+            gc.fillRect(star.x, star.y, 2, 1);
         },
         step: function () {
             for (var _i = 0, _a = this.stars; _i < _a.length; _i++) {
