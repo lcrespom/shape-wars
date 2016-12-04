@@ -1,3 +1,5 @@
+import { setupStars } from './stars';
+
 interface GameElement {
 	step: (game: Game) => void;
 }
@@ -9,59 +11,6 @@ interface Game {
 	canvas: HTMLCanvasElement;
 	gc: CanvasRenderingContext2D;
 	time: number;
-}
-
-/*-------------------- Stars --------------------*/
-
-const NUM_STARS = 100;
-
-interface Star {
-	x: number;
-	y: number;
-	speed: number;
-	//ToDo: RGB, speed, twinkle period, twinkle position
-}
-
-function initStar(w: number, h: number,
-	star = { x: 0, y: 0, speed: 0 }): Star {
-	star.x = Math.random() * w;
-	star.y = star.y > 0 ? 0 : Math.random() * h;
-	star.speed = 0.1 + Math.random() * 0.9;
-	return star;
-}
-
-function initStars(w: number, h: number): Star[] {
-	let stars: Star[] = [];
-	for (let i = 0; i < NUM_STARS; i++) {
-		stars.push(initStar(w, h));
-	}
-	return stars;
-}
-
-function setupStars(canvas: HTMLCanvasElement, gc: CanvasRenderingContext2D) {
-	let imgData = gc.createImageData(1, 1);
-	let pixel = imgData.data;
-	return {
-		stars: initStars(canvas.width, canvas.height),
-		pixel,
-		putPixel(x: number, y: number,
-			r: number, g: number, b: number, a: number) {
-			this.pixel[0] = r;
-			this.pixel[1] = g;
-			this.pixel[2] = b;
-			this.pixel[3] = a;
-			gc.putImageData(imgData, x, y);
-		},
-		step() {
-			for (let star of this.stars) {
-				let f = 255 << 0;
-				this.putPixel(star.x, star.y, f, f, f, f);
-				star.y += star.speed;
-				if (star.y > canvas.height)
-					initStar(canvas.width, canvas.height, star);
-			}
-		}
-	};
 }
 
 
