@@ -18,7 +18,7 @@ function initStar(w: number, h: number, str = { y: 0 }): Star {
 	star.x = Math.random() * w;
 	star.y = star.y > 0 ? 0 : Math.random() * h;
 	star.speed = 0.1 + Math.random() * 0.9;
-	let randomColor = () => Math.round(64 + 191 * Math.random() * star.speed);
+	let randomColor = () => Math.round(128 + 127 * Math.random() * star.speed);
 	star.r = randomColor();
 	star.g = randomColor();
 	star.b = randomColor() & 252;	// Background objects have 2 last bits to 0
@@ -43,7 +43,7 @@ export function setupStars(canvas: HTMLCanvasElement) {
 		step(game: Game) {
 			for (let star of this.stars) {
 				this.drawStar(game.gc, star);
-				star.y += star.speed * game.elements.ship.speed;
+				star.y += star.speed * game.elements.ship.speedY;
 				if (star.y > canvas.height)
 					initStar(canvas.width, canvas.height, star);
 			}

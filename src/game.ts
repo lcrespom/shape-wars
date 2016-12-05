@@ -1,3 +1,5 @@
+import { setupKeyboard } from './keyboard';
+
 export interface GameElement {
 	step: (game: Game) => void;
 }
@@ -13,6 +15,7 @@ export interface Game {
 
 
 export function gameSetup(): Game {
+	setupKeyboard();
 	let canvas = $('#game-canvas')[0] as HTMLCanvasElement;
 	let ctx = canvas.getContext('2d');
 	if (!ctx)
