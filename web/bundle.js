@@ -53,24 +53,57 @@ var ship_1 = require('./ship');
 function initGame() {
     var game = game_1.gameSetup();
     game.elements.stars = stars_1.setupStars(game.canvas);
-    game.elements.ship = ship_1.setupShip();
+    game.elements.ship = ship_1.setupShip(game.canvas);
     return game;
 }
 $(function () {
     game_1.gameLoop(initGame());
 });
 
-},{"./game":1,"./ship":3,"./stars":4}],3:[function(require,module,exports){
+},{"./game":1,"./ship":4,"./stars":5}],3:[function(require,module,exports){
 "use strict";
-function setupShip() {
+function createShape(paths) {
     return {
-        speed: 0.5,
-        step: function (game) { }
+        paths: paths,
+        draw: function (gc, x, y) {
+            for (var _i = 0, paths_1 = paths; _i < paths_1.length; _i++) {
+                var path = paths_1[_i];
+                gc.fillStyle = path.fillStyle;
+                gc.moveTo(x + path.points[0].x, y + path.points[0].y);
+                for (var i = 1; i < path.points.length; i++)
+                    gc.lineTo(x + path.points[i].x, y + path.points[i].y);
+                gc.fill();
+            }
+        }
+    };
+}
+exports.createShape = createShape;
+
+},{}],4:[function(require,module,exports){
+"use strict";
+var shape_1 = require('./shape');
+var shipPaths = [{
+        fillStyle: 'rgb(0, 192, 128)',
+        points: [
+            { x: 0, y: 50 },
+            { x: 25, y: 0 },
+            { x: 50, y: 50 }
+        ]
+    }];
+function setupShip(canvas) {
+    var shape = shape_1.createShape(shipPaths);
+    return {
+        speed: 1,
+        x: canvas.width / 2 - 25,
+        y: canvas.height - 80,
+        step: function (game) {
+            shape.draw(game.gc, this.x, this.y);
+        }
     };
 }
 exports.setupShip = setupShip;
 
-},{}],4:[function(require,module,exports){
+},{"./shape":3}],5:[function(require,module,exports){
 "use strict";
 var NUM_STARS = 150;
 function initStar(w, h, str) {
@@ -82,7 +115,7 @@ function initStar(w, h, str) {
     var randomColor = function () { return Math.round(64 + 191 * Math.random() * star.speed); };
     star.r = randomColor();
     star.g = randomColor();
-    star.b = randomColor();
+    star.b = randomColor() & 252; // Background objects have 2 last bits to 0
     return star;
 }
 function initStars(w, h) {
@@ -97,7 +130,7 @@ function setupStars(canvas) {
         stars: initStars(canvas.width, canvas.height),
         drawStar: function (gc, star) {
             gc.fillStyle = "rgb(" + star.r + ", " + star.g + ", " + star.b + ")";
-            gc.fillRect(star.x, star.y, 2, 1);
+            gc.fillRect(star.x, star.y, 2, 2);
         },
         step: function (game) {
             for (var _i = 0, _a = this.stars; _i < _a.length; _i++) {

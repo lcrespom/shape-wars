@@ -21,7 +21,7 @@ function initStar(w: number, h: number, str = { y: 0 }): Star {
 	let randomColor = () => Math.round(64 + 191 * Math.random() * star.speed);
 	star.r = randomColor();
 	star.g = randomColor();
-	star.b = randomColor();
+	star.b = randomColor() & 252;	// Background objects have 2 last bits to 0
 	return star;
 }
 
@@ -38,7 +38,7 @@ export function setupStars(canvas: HTMLCanvasElement) {
 		stars: initStars(canvas.width, canvas.height),
 		drawStar(gc: CanvasRenderingContext2D, star: Star) {
 			gc.fillStyle = `rgb(${star.r}, ${star.g}, ${star.b})`;
-			gc.fillRect(star.x, star.y, 2, 1);
+			gc.fillRect(star.x, star.y, 2, 2);
 		},
 		step(game: Game) {
 			for (let star of this.stars) {
