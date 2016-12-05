@@ -130,9 +130,9 @@ function setupShip(canvas) {
         x: canvas.width / 2 - 25,
         y: canvas.height - 120,
         step: function (game) {
-            if (keyboard_1.isKeyPressed(KEY_LEFT))
+            if (keyboard_1.isKeyPressed(KEY_LEFT) && this.x > 5)
                 this.x -= this.speedX;
-            if (keyboard_1.isKeyPressed(KEY_RIGHT))
+            if (keyboard_1.isKeyPressed(KEY_RIGHT) && this.x < canvas.width - 55)
                 this.x += this.speedX;
             shape.draw(game.gc, this.x, this.y);
         }
