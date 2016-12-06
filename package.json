@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run serve",
     "build": "browserify -d src/main.ts -p [ tsify ] | exorcist web/bundle.js.map > web/bundle.js",
+    "watch": "chokidar 'src/**/*.ts' -c 'npm run build && echo ----- Build done -----'",
     "serve": "http-server web -c-1"
   },
   "author": "Luis Crespo",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@types/jquery": "^2.0.34",
     "browserify": "^13.1.1",
+    "chokidar-cli": "^1.2.0",
     "exorcist": "^0.4.0",
     "http-server": "^0.9.0",
     "tsify": "^2.0.3",
