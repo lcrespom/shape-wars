@@ -9,10 +9,10 @@ const CURSOR_LEFT = 37;
 const CURSOR_RIGHT = 39;
 const KEY_FIRE = 77;
 
-const FIRE_TIME = 30;
+const FIRE_TIME = 10;
 const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
-const BULLET_SPEED = 4;
+const BULLET_SPEED = 8;
 
 let shipPaths = [{
 	fillStyle: 'rgb(0, 192, 128)',
