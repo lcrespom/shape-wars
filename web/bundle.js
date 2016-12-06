@@ -1,6 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 var keyboard_1 = require('./keyboard');
+function createGroup() {
+    return {
+        items: [],
+        step: function (game) {
+            for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
+                var item = _a[_i];
+                item.step(game);
+            }
+            this.items = this.items.filter(function (item) { return !item.dead; });
+        },
+        add: function (element) {
+            this.items.push(element);
+        }
+    };
+}
+exports.createGroup = createGroup;
 function gameSetup() {
     keyboard_1.setupKeyboard();
     var canvas = $('#game-canvas')[0];
@@ -81,6 +97,7 @@ function initGame() {
     var game = game_1.gameSetup();
     game.elements.stars = stars_1.setupStars(game.canvas);
     game.elements.ship = ship_1.setupShip(game.canvas);
+    game.elements.bullets = game_1.createGroup();
     return game;
 }
 $(function () {
@@ -118,6 +135,8 @@ var CURSOR_LEFT = 37;
 var CURSOR_RIGHT = 39;
 var KEY_FIRE = 77;
 var FIRE_TIME = 30;
+var BULLET_LENGTH = 6;
+var BULLET_STROKE_STYLE = 'white';
 var shipPaths = [{
         fillStyle: 'rgb(0, 192, 128)',
         points: [
@@ -153,11 +172,31 @@ function setupShip(canvas) {
             if (!keyboard_1.isKeyPressed(KEY_FIRE) || this.fireTime > 0)
                 return;
             this.fireTime = FIRE_TIME;
+            game.elements.bullets.add(createBullet(this.x + 25, this.y));
             // ToDo: create bullet & add it to game
         }
     };
 }
 exports.setupShip = setupShip;
+function createBullet(x, y) {
+    return {
+        x: x, y: y,
+        step: function (game) {
+            this.draw(game.gc);
+            this.y -= 4;
+            if (this.y < 0)
+                this.dead = true;
+        },
+        draw: function (gc) {
+            gc.beginPath();
+            gc.strokeStyle = BULLET_STROKE_STYLE;
+            gc.moveTo(this.x, this.y);
+            gc.lineTo(this.x, this.y - BULLET_LENGTH);
+            gc.closePath();
+            gc.stroke();
+        }
+    };
+}
 
 },{"./keyboard":2,"./shape":4}],6:[function(require,module,exports){
 "use strict";

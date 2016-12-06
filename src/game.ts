@@ -14,6 +14,20 @@ export interface Game {
 }
 
 
+export function createGroup() {
+	return {
+		items: [],
+		step(game: Game) {
+			for (let item of this.items)
+				item.step(game);
+			this.items = this.items.filter(item => !item.dead);
+		},
+		add(element: GameElement) {
+			this.items.push(element);
+		}
+	};
+}
+
 export function gameSetup(): Game {
 	setupKeyboard();
 	let canvas = $('#game-canvas')[0] as HTMLCanvasElement;
