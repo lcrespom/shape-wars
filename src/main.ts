@@ -1,15 +1,23 @@
 import { setupKeyboard } from './gamelib/keyboard';
-import { Game, ElementGroup } from './gamelib/game';
+import { Game, GameElement, ElementGroup } from './gamelib/game';
 import { setupStars } from './stars';
 import { setupShip } from './ship';
 
+interface ShapeWarsElements {
+	stars: GameElement;
+	ship: GameElement;
+	bullets: GameElement;
+}
 
 function initGame(): Game {
 	setupKeyboard();
-	let game = new Game($('#game-canvas')[0] as HTMLCanvasElement);
-	game.elements.stars = setupStars(game.canvas);
-	game.elements.ship = setupShip(game.canvas);
-	game.elements.bullets = new ElementGroup();
+	let canvas = $('#game-canvas')[0] as HTMLCanvasElement;
+	let elements: ShapeWarsElements = {
+		stars: setupStars(canvas),
+		ship: setupShip(canvas),
+		bullets: new ElementGroup()
+	};
+	let game = new Game(canvas, elements);
 	return game;
 }
 

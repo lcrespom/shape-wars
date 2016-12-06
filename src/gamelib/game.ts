@@ -3,22 +3,17 @@ export interface GameElement {
 	dead?: boolean;
 }
 
-// interface GameElements {
-// 	[prop: string]: GameElement;
-// }
 
 export class Game {
-	elements: any;
 	gc: CanvasRenderingContext2D;
 	time: number;
 	fps = 0;
 	cpu = 0;
 
-	constructor(public canvas: HTMLCanvasElement) {
+	constructor(public canvas: HTMLCanvasElement, public elements: any) {
 		let ctx = this.canvas.getContext('2d');
 		if (!ctx)
 			throw Error('Could not setup canvas');
-		this.elements = {};
 		this.gc = ctx;
 		this.time = Date.now();
 	}
