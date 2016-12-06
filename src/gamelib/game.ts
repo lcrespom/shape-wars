@@ -3,6 +3,10 @@ export interface GameElement {
 	dead?: boolean;
 }
 
+// interface GameElements {
+// 	[prop: string]: GameElement;
+// }
+
 export class Game {
 	elements: any;
 	gc: CanvasRenderingContext2D;

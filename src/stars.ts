@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { Game } from './gamelib/game';
 
 const NUM_STARS = 150;
 

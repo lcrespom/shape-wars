@@ -1,5 +1,5 @@
-import { setupKeyboard } from './keyboard';
-import { Game, ElementGroup } from './game';
+import { setupKeyboard } from './gamelib/keyboard';
+import { Game, ElementGroup } from './gamelib/game';
 import { setupStars } from './stars';
 import { setupShip } from './ship';
 

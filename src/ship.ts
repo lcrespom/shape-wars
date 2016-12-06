@@ -1,6 +1,6 @@
-import { Game } from './game';
-import { createShape } from './shape';
-import { isKeyPressed } from './keyboard';
+import { Game } from './gamelib/game';
+import { createShape } from './gamelib/shape';
+import { isKeyPressed } from './gamelib/keyboard';
 
 const KEY_LEFT = 90;
 const KEY_RIGHT = 88;
