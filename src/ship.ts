@@ -1,5 +1,5 @@
 import { Game } from './gamelib/game';
-import { createShape } from './gamelib/shape';
+import { Shape } from './gamelib/shape';
 import { isKeyPressed } from './gamelib/keyboard';
 
 const KEY_LEFT = 90;
@@ -22,7 +22,7 @@ let shipPaths = [{
 }];
 
 export function setupShip(canvas: HTMLCanvasElement) {
-	let shape = createShape(shipPaths);
+	let shape = new Shape(shipPaths);
 	return {
 		speedY: 1,
 		speedX: 2,
