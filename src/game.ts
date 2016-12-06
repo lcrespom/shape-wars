@@ -1,5 +1,6 @@
 export interface GameElement {
 	step: (game: Game) => void;
+	dead?: boolean;
 }
 
 export class Game {
@@ -8,7 +9,6 @@ export class Game {
 	time: number;
 	fps = 0;
 	cpu = 0;
-	fpsct = 0;
 
 	constructor(public canvas: HTMLCanvasElement) {
 		let ctx = this.canvas.getContext('2d');
@@ -19,12 +19,13 @@ export class Game {
 		this.time = Date.now();
 	}
 
-	loop() {
+	loop(cb?: () => void) {
 		window.requestAnimationFrame(_ => {
 			let tBefore = Date.now();
 			this.step();
 			this.calcTime(tBefore);
-			this.loop();
+			if (cb) cb();
+			this.loop(cb);
 		});
 	}
 
@@ -40,25 +41,24 @@ export class Game {
 		this.time = now;
 		this.fps = 1000 / elapsed;
 		this.cpu = (now - tBefore) / elapsed;
-		if ((++this.fpsct) == 25) {
-			this.fpsct = 0;
-			$('#fps').text(Math.round(this.fps));
-			$('#cpu').text(Math.round(this.cpu * 100));
-		}
 	}
 }
 
 
-export function createGroup() {
-	return {
-		items: [],
-		step(game: Game) {
-			for (let item of this.items)
-				item.step(game);
-			this.items = this.items.filter(item => !item.dead);
-		},
-		add(element: GameElement) {
-			this.items.push(element);
-		}
-	};
+export class ElementGroup implements GameElement {
+	items: GameElement[];
+
+	constructor() {
+		this.items = [];
+	}
+
+	step(game: Game) {
+		for (let item of this.items)
+			item.step(game);
+		this.items = this.items.filter(item => !item.dead);
+	}
+
+	add(element: GameElement) {
+		this.items.push(element);
+	}
 }
