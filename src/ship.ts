@@ -1,4 +1,4 @@
-import { Game } from './gamelib/game';
+import { Game, GameElement } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 import { isKeyPressed } from './gamelib/keyboard';
 
@@ -11,6 +11,7 @@ const KEY_FIRE = 77;
 const FIRE_TIME = 30;
 const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
+const BULLET_SPEED = 4;
 
 let shipPaths = [{
 	fillStyle: 'rgb(0, 192, 128)',
@@ -21,53 +22,63 @@ let shipPaths = [{
 	]
 }];
 
-export function setupShip(canvas: HTMLCanvasElement) {
-	let shape = new Shape(shipPaths);
-	return {
-		speedY: 1,
-		speedX: 2,
-		x: canvas.width / 2 - 25,
-		y: canvas.height - 120,
-		fireTime: 0,
-		step(game: Game) {
-			this.move();
-			this.fire(game);
-			shape.draw(game.gc, this.x, this.y);
-		},
-		move() {
-			if ((isKeyPressed(KEY_LEFT) || isKeyPressed(CURSOR_LEFT))
-				&& this.x > 5)
-				this.x -= this.speedX;
-			if ((isKeyPressed(KEY_RIGHT) || isKeyPressed(CURSOR_RIGHT))
-				&& this.x < canvas.width - 55)
-				this.x += this.speedX;
-		},
-		fire(game: Game) {
-			if (this.fireTime > 0) this.fireTime--;
-			if (!isKeyPressed(KEY_FIRE) || this.fireTime > 0) return;
-			this.fireTime = FIRE_TIME;
-			game.elements.bullets.add(createBullet(this.x + 25, this.y));
-			// ToDo: create bullet & add it to game
-		}
-	};
+
+export class Ship implements GameElement {
+	speedY = 1;
+	speedX = 2;
+	fireTime = 0;
+	x: number;
+	y: number;
+	shape: Shape;
+
+	constructor(canvas: HTMLCanvasElement) {
+		this.x = canvas.width / 2 - 25;
+		this.y = canvas.height - 120;
+		this.shape = new Shape(shipPaths);
+	}
+
+	step(game: Game) {
+		this.move(game);
+		this.fire(game);
+		this.shape.draw(game.gc, this.x, this.y);
+	}
+
+	move(game: Game) {
+		if ((isKeyPressed(KEY_LEFT) || isKeyPressed(CURSOR_LEFT))
+			&& this.x > 5)
+			this.x -= this.speedX;
+		if ((isKeyPressed(KEY_RIGHT) || isKeyPressed(CURSOR_RIGHT))
+			&& this.x < game.canvas.width - 55)
+			this.x += this.speedX;
+	}
+
+	fire(game: Game) {
+		if (this.fireTime > 0) this.fireTime--;
+		if (!isKeyPressed(KEY_FIRE) || this.fireTime > 0) return;
+		this.fireTime = FIRE_TIME;
+		game.elements.bullets.add(new Bullet(this.x + 25, this.y));
+	}
 }
 
-function createBullet(x: number, y: number) {
-	return {
-		x, y,
-		step(game: Game) {
-			this.draw(game.gc);
-			this.y -= 4;
-			if (this.y < 0)
-				this.dead = true;
-		},
-		draw(gc: CanvasRenderingContext2D) {
-			gc.beginPath();
-			gc.strokeStyle = BULLET_STROKE_STYLE;
-			gc.moveTo(this.x, this.y);
-			gc.lineTo(this.x, this.y - BULLET_LENGTH);
-			gc.closePath();
-			gc.stroke();
-		}
-	};
+
+class Bullet implements GameElement {
+	dead: boolean;
+
+	constructor(public x: number, public y: number) {}
+
+	step(game: Game) {
+		this.draw(game.gc);
+		this.y -= BULLET_SPEED;
+		if (this.y < 0)
+			this.dead = true;
+	}
+
+	draw(gc: CanvasRenderingContext2D) {
+		gc.beginPath();
+		gc.strokeStyle = BULLET_STROKE_STYLE;
+		gc.moveTo(this.x, this.y);
+		gc.lineTo(this.x, this.y - BULLET_LENGTH);
+		gc.closePath();
+		gc.stroke();
+	}
 }
