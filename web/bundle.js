@@ -114,6 +114,10 @@ var shape_1 = require('./shape');
 var keyboard_1 = require('./keyboard');
 var KEY_LEFT = 90;
 var KEY_RIGHT = 88;
+var CURSOR_LEFT = 37;
+var CURSOR_RIGHT = 39;
+var KEY_FIRE = 77;
+var FIRE_TIME = 30;
 var shipPaths = [{
         fillStyle: 'rgb(0, 192, 128)',
         points: [
@@ -129,12 +133,27 @@ function setupShip(canvas) {
         speedX: 2,
         x: canvas.width / 2 - 25,
         y: canvas.height - 120,
+        fireTime: 0,
         step: function (game) {
-            if (keyboard_1.isKeyPressed(KEY_LEFT) && this.x > 5)
-                this.x -= this.speedX;
-            if (keyboard_1.isKeyPressed(KEY_RIGHT) && this.x < canvas.width - 55)
-                this.x += this.speedX;
+            this.move();
+            this.fire(game);
             shape.draw(game.gc, this.x, this.y);
+        },
+        move: function () {
+            if ((keyboard_1.isKeyPressed(KEY_LEFT) || keyboard_1.isKeyPressed(CURSOR_LEFT))
+                && this.x > 5)
+                this.x -= this.speedX;
+            if ((keyboard_1.isKeyPressed(KEY_RIGHT) || keyboard_1.isKeyPressed(CURSOR_RIGHT))
+                && this.x < canvas.width - 55)
+                this.x += this.speedX;
+        },
+        fire: function (game) {
+            if (this.fireTime > 0)
+                this.fireTime--;
+            if (!keyboard_1.isKeyPressed(KEY_FIRE) || this.fireTime > 0)
+                return;
+            this.fireTime = FIRE_TIME;
+            // ToDo: create bullet & add it to game
         }
     };
 }
