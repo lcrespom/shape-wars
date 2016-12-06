@@ -4,13 +4,18 @@ export interface GameElement {
 }
 
 
+export interface GameElements {
+	[prop: string]: GameElement;
+}
+
+
 export class Game {
 	gc: CanvasRenderingContext2D;
 	time: number;
 	fps = 0;
 	cpu = 0;
 
-	constructor(public canvas: HTMLCanvasElement, public elements: any) {
+	constructor(public canvas: HTMLCanvasElement, public elements: GameElements) {
 		let ctx = this.canvas.getContext('2d');
 		if (!ctx)
 			throw Error('Could not setup canvas');

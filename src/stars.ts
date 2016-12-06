@@ -1,4 +1,5 @@
 import { Game, GameElement } from './gamelib/game';
+import { ShapeWarsElements } from './shape-wars';
 
 const NUM_STARS = 150;
 
@@ -46,7 +47,8 @@ export class Starfield implements GameElement {
 	step(game: Game) {
 		for (let star of this.stars) {
 			this.drawStar(game.gc, star);
-			star.y += star.speed * game.elements.ship.speedY;
+			let elements = game.elements as ShapeWarsElements;
+			star.y += star.speed * elements.ship.speedY;
 			if (star.y > game.canvas.height)
 				this.initStar(game.canvas.width, game.canvas.height, star);
 		}

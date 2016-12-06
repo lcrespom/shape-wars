@@ -1,6 +1,7 @@
 import { Game, GameElement } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 import { isKeyPressed } from './gamelib/keyboard';
+import { ShapeWarsElements } from './shape-wars';
 
 const KEY_LEFT = 90;
 const KEY_RIGHT = 88;
@@ -56,7 +57,8 @@ export class Ship implements GameElement {
 		if (this.fireTime > 0) this.fireTime--;
 		if (!isKeyPressed(KEY_FIRE) || this.fireTime > 0) return;
 		this.fireTime = FIRE_TIME;
-		game.elements.bullets.add(new Bullet(this.x + 25, this.y));
+		let elements = game.elements as ShapeWarsElements;
+		elements.bullets.add(new Bullet(this.x + 25, this.y));
 	}
 }
 
