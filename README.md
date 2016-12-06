@@ -2,12 +2,11 @@
 A vectorial retro videogame
 
 ## ToDo
-- Stars
-	- Twinkle
-- Ship
-	- Shape
-	- Move with keyboard
-	- Fire
+- Enemies
+	- Shapes
+	- Waves
+	- Bullets
+- Explosions
 - Collision detection trick:
 	- Get color of target pixel (see http://stackoverflow.com/questions/667045/getpixel-from-html-canvas)
 	- Obtain last 2 bits from blue component

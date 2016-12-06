@@ -26,7 +26,7 @@ let shipPaths = [{
 
 export class Ship implements GameElement {
 	speedY = 1;
-	speedX = 2;
+	speedX = 3;
 	fireTime = 0;
 	x: number;
 	y: number;
