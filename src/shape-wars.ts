@@ -15,6 +15,6 @@ export function createElements(canvas): ShapeWarsElements {
 		stars: new Starfield(canvas),
 		ship: new Ship(canvas),
 		bullets: new ElementGroup(),
-		enemies: new Enemies()
+		enemies: new Enemies(canvas)
 	};
 }
