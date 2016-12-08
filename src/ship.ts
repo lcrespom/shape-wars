@@ -9,7 +9,6 @@ const CURSOR_LEFT = 37;
 const CURSOR_RIGHT = 39;
 const KEY_FIRE = 77;
 
-const FIRE_TIME = 10;
 const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
 const BULLET_SPEED = 8;
@@ -68,9 +67,9 @@ export class Ship implements GameElement {
 
 
 class Bullet implements GameElement {
-	dead: boolean;
+	dead = false;
 
-	constructor(public x: number, public y: number) {}
+	constructor(public x: number, public y: number) { }
 
 	step(game: Game) {
 		this.y -= BULLET_SPEED;
@@ -89,9 +88,25 @@ class Bullet implements GameElement {
 		gc.stroke();
 	}
 
-	hitEnemy(game: Game) {
+	hitEnemy(game: Game): boolean {
+		let color = getPixelColor(game.gc, this.x, this.y);
+		// ToDo: color.b & 3 != 1
+		if ((color.b & 3) == 0) return false;
+		console.log('Hit: ', color);
 		let elements = game.elements as ShapeWarsElements;
 		elements.enemies.items.forEach(enemy => {
+			// ToDo: find closest enemy
 		});
+		return true;
 	}
+}
+
+
+function getPixelColor(gc: CanvasRenderingContext2D, x: number, y: number) {
+	let data = gc.getImageData(x, y, 1, 1).data;
+	return {
+		r: data[0],
+		g: data[1],
+		b: data[2]
+	};
 }
