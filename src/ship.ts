@@ -27,14 +27,14 @@ let shipPaths = [{
 export class Ship implements GameElement {
 	speedY = 1;
 	speedX = 3;
-	fireTime = 0;
 	x: number;
 	y: number;
 	shape: Shape;
+	canFire = true;
 
 	constructor(canvas: HTMLCanvasElement) {
-		this.x = canvas.width / 2 - 25;
-		this.y = canvas.height - 120;
+		this.x = canvas.width / 2;
+		this.y = canvas.height - 100;
 		this.shape = new Shape(shipPaths);
 	}
 
@@ -46,19 +46,23 @@ export class Ship implements GameElement {
 
 	move(game: Game) {
 		if ((isKeyPressed(KEY_LEFT) || isKeyPressed(CURSOR_LEFT))
-			&& this.x > 5)
+			&& this.x > this.shape.width / 2 + 5)
 			this.x -= this.speedX;
 		if ((isKeyPressed(KEY_RIGHT) || isKeyPressed(CURSOR_RIGHT))
-			&& this.x < game.canvas.width - this.shape.width - 5)
+			&& this.x < game.canvas.width - this.shape.width / 2 - 5)
 			this.x += this.speedX;
 	}
 
 	fire(game: Game) {
-		if (this.fireTime > 0) this.fireTime--;
-		if (!isKeyPressed(KEY_FIRE) || this.fireTime > 0) return;
-		this.fireTime = FIRE_TIME;
-		let elements = game.elements as ShapeWarsElements;
-		elements.bullets.add(new Bullet(this.x + 25, this.y));
+		if (isKeyPressed(KEY_FIRE)) {
+			if (!this.canFire) return;
+			this.canFire = false;
+			let elements = game.elements as ShapeWarsElements;
+			elements.bullets.add(new Bullet(this.x, this.y - 15));
+		}
+		else {
+			this.canFire = true;
+		}
 	}
 }
 
@@ -69,10 +73,11 @@ class Bullet implements GameElement {
 	constructor(public x: number, public y: number) {}
 
 	step(game: Game) {
-		this.draw(game.gc);
 		this.y -= BULLET_SPEED;
-		if (this.y < 0)
+		if (this.hitEnemy(game) || this.y < 0)
 			this.dead = true;
+		else
+			this.draw(game.gc);
 	}
 
 	draw(gc: CanvasRenderingContext2D) {
@@ -82,5 +87,11 @@ class Bullet implements GameElement {
 		gc.lineTo(this.x, this.y - BULLET_LENGTH);
 		gc.closePath();
 		gc.stroke();
+	}
+
+	hitEnemy(game: Game) {
+		let elements = game.elements as ShapeWarsElements;
+		elements.enemies.items.forEach(enemy => {
+		});
 	}
 }

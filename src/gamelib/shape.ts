@@ -14,6 +14,7 @@ export class Shape {
 
 	constructor(public paths: Path[]) {
 		this.calcWidthHeight(paths);
+		this.recenter();
 	}
 
 	calcWidthHeight(paths: Path[]) {
@@ -29,6 +30,13 @@ export class Shape {
 			}));
 		this.width = maxx - minx;
 		this.height = maxy - miny;
+	}
+
+	recenter() {
+		this.paths.forEach(path => path.points.forEach(point => {
+			point.x -= this.width / 2;
+			point.y -= this.height / 2;
+		}));
 	}
 
 	draw(gc: CanvasRenderingContext2D, x: number, y: number, angle = 0) {
@@ -48,8 +56,8 @@ export class Shape {
 
 	isOutside(canvas: HTMLCanvasElement, x: number, y: number) {
 		return x + this.width < 0
-			|| x > canvas.width
+			|| x - this.width > canvas.width
 			|| y + this.height < 0
-			|| y > canvas.height;
+			|| y - this.height > canvas.height;
 	}
 }

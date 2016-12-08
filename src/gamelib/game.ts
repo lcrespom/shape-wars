@@ -65,4 +65,12 @@ export class ElementGroup implements GameElement {
 	add(element: GameElement) {
 		this.items.push(element);
 	}
+
+	forEach(cb: (ge: GameElement) => void) {
+		this.items.forEach(item => {
+			if (item instanceof ElementGroup)
+				item.forEach(cb);
+			else cb(item);
+		});
+	}
 }

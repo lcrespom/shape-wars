@@ -32,13 +32,13 @@ class Route {
 }
 
 
-let route1 = new Route(20, 0, 2, 1, [
-	{ steps: 35, ax: 0.2, ay: 0.1 },
+let route1 = new Route(20, -20, 2, 1, [
+	{ steps: 36, ax: 0.2, ay: 0.1 },
 	{ steps: 100, ax: -0.2, ay: 0 }
 ]);
 
-let route2 = new Route(430, -40, -2, 1, [
-	{ steps: 35, ax: -0.2, ay: 0.1 },
+let route2 = new Route(460, -20, -2, 1, [
+	{ steps: 36, ax: -0.2, ay: 0.1 },
 	{ steps: 100, ax: 0.2, ay: 0 }
 ]);
 
@@ -115,7 +115,7 @@ class Enemy implements GameElement {
 
 	move(canvas: HTMLCanvasElement) {
 		this.route.move();
-		if (this.shape.isOutside(canvas, this.route.x, this.route.y + 20)) {
+		if (this.shape.isOutside(canvas, this.route.x, this.route.y)) {
 			this.dead = true;
 			return;
 		}
