@@ -1,7 +1,9 @@
 import { Game, GameElement, ElementGroup } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 
-
+/** A route is in charge of moving a ship across the canvas, folliwing a
+ * given path based on accelleration rules
+ */
 class Route {
 	step = 0;
 	part = 0;
@@ -9,6 +11,10 @@ class Route {
 	constructor(public x: number, public y: number,
 		public speedX: number, public speedY: number,
 		public parts: { steps: number, ax: number, ay: number }[]) {}
+
+	clone() {
+		return new Route(this.x, this.y, this.speedX, this.speedY, this.parts);
+	}
 
 	move() {
 		this.x += this.speedX;
@@ -31,22 +37,12 @@ let route1 = new Route(20, 0, 2, 1, [
 	{ steps: 100, ax: -0.2, ay: 0 }
 ]);
 
-let route2 = new Route(420, 0, -2, 1, [
+let route2 = new Route(430, -40, -2, 1, [
 	{ steps: 35, ax: -0.2, ay: 0.1 },
 	{ steps: 100, ax: 0.2, ay: 0 }
 ]);
 
-
-export class Enemies extends ElementGroup {
-	constructor(canvas) {
-		super();
-		this.add(new Enemy(route1));
-		this.add(new Enemy(route2));
-	}
-}
-
-
-let enemyShape = [{
+let enemyShape1 = new Shape([{
 	fillStyle: 'rgb(255, 0, 65)',
 	points: [
 		{ x: 0, y: 0 },
@@ -54,14 +50,58 @@ let enemyShape = [{
 		{ x: 20, y: 30 },
 		{ x: 10, y: 30 }
 	]
-}];
+}]);
+
+let enemyShape2 = new Shape([{
+	fillStyle: 'rgb(255, 0, 193)',
+	points: [
+		{ x: 0, y: 0 },
+		{ x: 30, y: 0 },
+		{ x: 20, y: 30 },
+		{ x: 10, y: 30 }
+	]
+}]);
+
+
+/** A squadron is a group of ships that follow the same route, spaced
+ * between each other by a given amount of steps.
+ */
+class Squadron extends ElementGroup {
+	stepct: number;
+
+	constructor(public route: Route, public shape: Shape,
+		public ships: number, public steps: number, delay = 0) {
+		super();
+		this.stepct = steps - delay;
+	}
+
+	step(game: Game) {
+		super.step(game);
+		if (this.ships <= 0) return;
+		this.stepct++;
+		if (this.stepct >= this.steps) {
+			this.stepct = 0;
+			this.ships--;
+			this.add(new Enemy(this.route.clone(), this.shape));
+		}
+	}
+}
+
+
+/** The living set of enemy ships in the game */
+export class Enemies extends ElementGroup {
+	constructor(canvas) {
+		super();
+		this.add(new Squadron(route1, enemyShape1, 5, 20));
+		this.add(new Squadron(route2, enemyShape2, 5, 20, 30));
+	}
+}
+
 
 class Enemy implements GameElement {
-	shape: Shape;
 	dead = false;
 
-	constructor(public route: Route) {
-		this.shape = new Shape(enemyShape);
+	constructor(public route: Route, public shape: Shape) {
 	}
 
 	step(game: Game) {
@@ -75,7 +115,7 @@ class Enemy implements GameElement {
 
 	move(canvas: HTMLCanvasElement) {
 		this.route.move();
-		if (this.shape.isOutside(canvas, this.route.x, this.route.y)) {
+		if (this.shape.isOutside(canvas, this.route.x, this.route.y + 20)) {
 			this.dead = true;
 			return;
 		}
