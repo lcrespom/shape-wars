@@ -19,39 +19,28 @@ let enemyPaths = [{
 }];
 
 class Enemy implements GameElement {
-	speedY = 2;
-	speedX = 1;
-	x: number;
-	y: number;
 	shape: Shape;
 	dead = false;
-	steps = 0;
+	route: Route;
 
 	constructor() {
-		this.x = 20;
-		this.y = 0;
+		this.route = new Route(20, 0, 2, 1, [
+			{ steps: 35, ax: 0.2, ay: 0.1 },
+			{ steps: 100, ax: -0.2, ay: 0 }
+		]);
 		this.shape = new Shape(enemyPaths);
 	}
 
 	step(game: Game) {
 		this.move(game.canvas);
-		this.shape.draw(game.gc, this.x, this.y);
+		this.shape.draw(game.gc, this.route.x, this.route.y);
 	}
 
 	move(canvas: HTMLCanvasElement) {
-		this.x += this.speedX;
-		this.y += this.speedY;
-		if (this.shape.isOutside(canvas, this.x, this.y)) {
+		this.route.move();
+		if (this.shape.isOutside(canvas, this.route.x, this.route.y)) {
 			this.dead = true;
 			return;
-		}
-		this.steps++;
-		if (this.steps < 35) {
-			this.speedX += 0.2;
-			this.speedY += 0.1;
-		}
-		else {
-			this.speedX -= 0.2;
 		}
 	}
 }
