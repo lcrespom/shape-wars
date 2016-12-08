@@ -49,7 +49,7 @@ export class Ship implements GameElement {
 			&& this.x > 5)
 			this.x -= this.speedX;
 		if ((isKeyPressed(KEY_RIGHT) || isKeyPressed(CURSOR_RIGHT))
-			&& this.x < game.canvas.width - 55)
+			&& this.x < game.canvas.width - this.shape.width - 5)
 			this.x += this.speedX;
 	}
 
