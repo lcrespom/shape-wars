@@ -40,6 +40,9 @@ export class Ship implements GameElement {
 	step(game: Game) {
 		this.move(game);
 		this.fire(game);
+	}
+
+	draw(game: Game) {
 		this.shape.draw(game.gc, this.x, this.y);
 	}
 
@@ -75,38 +78,27 @@ class Bullet implements GameElement {
 		this.y -= BULLET_SPEED;
 		if (this.hitEnemy(game) || this.y < 0)
 			this.dead = true;
-		else
-			this.draw(game.gc);
 	}
 
-	draw(gc: CanvasRenderingContext2D) {
-		gc.beginPath();
-		gc.strokeStyle = BULLET_STROKE_STYLE;
-		gc.moveTo(this.x, this.y);
-		gc.lineTo(this.x, this.y - BULLET_LENGTH);
-		gc.closePath();
-		gc.stroke();
+	draw(game: Game) {
+		game.gc.beginPath();
+		game.gc.strokeStyle = BULLET_STROKE_STYLE;
+		game.gc.moveTo(this.x, this.y);
+		game.gc.lineTo(this.x, this.y - BULLET_LENGTH);
+		game.gc.closePath();
+		game.gc.stroke();
 	}
 
 	hitEnemy(game: Game): boolean {
-		let color = getPixelColor(game.gc, this.x, this.y);
-		// ToDo: color.b & 3 != 1
-		if ((color.b & 3) == 0) return false;
-		console.log('Hit: ', color);
-		let elements = game.elements as ShapeWarsElements;
-		elements.enemies.items.forEach(enemy => {
-			// ToDo: find closest enemy
-		});
-		return true;
+		return false;
+		// let color = getPixelColor(game.gc, this.x, this.y);
+		// if (color.a == 255 || color.a == 0) return false;
+		// //if ((color.b & 3) != 1) return false;
+		// console.log('Hit: ', color);
+		// let elements = game.elements as ShapeWarsElements;
+		// elements.enemies.items.forEach(enemy => {
+		// 	// ToDo: find closest enemy
+		// });
+		// return true;
 	}
-}
-
-
-function getPixelColor(gc: CanvasRenderingContext2D, x: number, y: number) {
-	let data = gc.getImageData(x, y, 1, 1).data;
-	return {
-		r: data[0],
-		g: data[1],
-		b: data[2]
-	};
 }

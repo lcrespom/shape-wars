@@ -43,7 +43,7 @@ let route2 = new Route(460, -20, -2, 1, [
 ]);
 
 let enemyShape1 = new Shape([{
-	fillStyle: 'rgb(255, 0, 65)',
+	fillStyle: '#FF0040',
 	points: [
 		{ x: 0, y: 0 },
 		{ x: 30, y: 0 },
@@ -53,7 +53,7 @@ let enemyShape1 = new Shape([{
 }]);
 
 let enemyShape2 = new Shape([{
-	fillStyle: 'rgb(255, 0, 193)',
+	fillStyle: '#FF00C0',
 	points: [
 		{ x: 0, y: 0 },
 		{ x: 30, y: 0 },
@@ -106,6 +106,9 @@ class Enemy implements GameElement {
 
 	step(game: Game) {
 		this.move(game.canvas);
+	}
+
+	draw(game: Game) {
 		this.shape.draw(game.gc, this.route.x, this.route.y, this.calcAngle());
 	}
 

@@ -1,5 +1,6 @@
 export interface GameElement {
 	step: (game: Game) => void;
+	draw: (game: Game) => void;
 	dead?: boolean;
 }
 
@@ -27,6 +28,7 @@ export class Game {
 		window.requestAnimationFrame(_ => {
 			let tBefore = Date.now();
 			this.step();
+			this.draw();
 			this.calcTime(tBefore);
 			if (cb) cb();
 			this.loop(cb);
@@ -34,9 +36,14 @@ export class Game {
 	}
 
 	step() {
-		this.gc.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		for (let key of Object.keys(this.elements))
 			this.elements[key].step(this);
+	}
+
+	draw() {
+		this.gc.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		for (let key of Object.keys(this.elements))
+			this.elements[key].draw(this);
 	}
 
 	calcTime(tBefore: number) {
@@ -59,7 +66,12 @@ export class ElementGroup implements GameElement {
 	step(game: Game) {
 		for (let item of this.items)
 			item.step(game);
+	}
+
+	draw(game: Game) {
 		this.items = this.items.filter(item => !item.dead);
+		for (let item of this.items)
+			item.draw(game);
 	}
 
 	add(element: GameElement) {
