@@ -85,4 +85,21 @@ export class ElementGroup implements GameElement {
 			else cb(item);
 		});
 	}
+
+	find(cb: (ge: GameElement) => boolean): GameElement | undefined {
+		let ge: GameElement | undefined = undefined;
+		this.items.some(item => {
+			if (item instanceof ElementGroup) {
+				ge = item.find(cb);
+				return ge !== undefined;
+			}
+			else {
+				if (!cb(item))
+					return false;
+				ge = item;
+				return true;
+			}
+		});
+		return ge;
+	}
 }

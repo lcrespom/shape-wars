@@ -1,4 +1,4 @@
-import { setupKeyboard } from './gamelib/keyboard';
+import { setupKeyboard, isKeyPressed } from './gamelib/keyboard';
 import { Game } from './gamelib/game';
 import { createElements } from './shape-wars';
 
@@ -19,6 +19,8 @@ function runGame() {
 			$('#fps').text(Math.round(game.fps));
 			$('#cpu').text(Math.round(game.cpu * 100));
 		}
+		if (isKeyPressed(82))
+			game.elements = createElements(game.canvas);
 	});
 }
 

@@ -11,10 +11,12 @@ export interface Point {
 export class Shape {
 	width: number;
 	height: number;
+	radius: number;
 
 	constructor(public paths: Path[]) {
-		this.calcWidthHeight(paths);
-		this.recenter();
+		let { minx, miny } = this.calcWidthHeight(paths);
+		this.recenter(minx, miny);
+		this.radius = Math.max(this.width, this.height) / 2;
 	}
 
 	calcWidthHeight(paths: Path[]) {
@@ -30,12 +32,13 @@ export class Shape {
 			}));
 		this.width = maxx - minx;
 		this.height = maxy - miny;
+		return { minx, miny };
 	}
 
-	recenter() {
+	recenter(minx: number, miny: number) {
 		this.paths.forEach(path => path.points.forEach(point => {
-			point.x -= this.width / 2;
-			point.y -= this.height / 2;
+			point.x -= minx + this.width / 2;
+			point.y -= miny + this.height / 2;
 		}));
 	}
 
@@ -59,5 +62,11 @@ export class Shape {
 			|| x - this.width > canvas.width
 			|| y + this.height < 0
 			|| y - this.height > canvas.height;
+	}
+
+	isPointInside(sx: number, sy: number, px: number, py: number) {
+		let sqr = x => x * x;
+		let dist = Math.sqrt(sqr(sx - px) + sqr(sy - py));
+		return dist <= this.radius;
 	}
 }

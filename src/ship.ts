@@ -2,6 +2,7 @@ import { Game, GameElement } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 import { isKeyPressed } from './gamelib/keyboard';
 import { ShapeWarsElements } from './shape-wars';
+import { Enemy } from './enemies';
 
 const KEY_LEFT = 90;
 const KEY_RIGHT = 88;
@@ -90,15 +91,16 @@ class Bullet implements GameElement {
 	}
 
 	hitEnemy(game: Game): boolean {
-		return false;
-		// let color = getPixelColor(game.gc, this.x, this.y);
-		// if (color.a == 255 || color.a == 0) return false;
-		// //if ((color.b & 3) != 1) return false;
-		// console.log('Hit: ', color);
-		// let elements = game.elements as ShapeWarsElements;
-		// elements.enemies.items.forEach(enemy => {
-		// 	// ToDo: find closest enemy
-		// });
-		// return true;
+		let killed = false;
+		let elements = game.elements as ShapeWarsElements;
+		elements.enemies.find((enemy: Enemy) => {
+			if (enemy.isHit(this.x, this.y)) {
+				enemy.explode();
+				killed = true;
+				return true;
+			}
+			return false;
+		});
+		return killed;
 	}
 }

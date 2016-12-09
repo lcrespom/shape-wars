@@ -98,7 +98,7 @@ export class Enemies extends ElementGroup {
 }
 
 
-class Enemy implements GameElement {
+export class Enemy implements GameElement {
 	dead = false;
 
 	constructor(public route: Route, public shape: Shape) {
@@ -122,5 +122,15 @@ class Enemy implements GameElement {
 			this.dead = true;
 			return;
 		}
+	}
+
+	isHit(x: number, y: number) {
+		return this.shape.isPointInside(
+			this.route.x, this.route.y, x, y);
+	}
+
+	explode() {
+		// ToDo: animate explosion, etc
+		this.dead = true;
 	}
 }
