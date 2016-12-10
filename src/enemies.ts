@@ -45,11 +45,11 @@ let routeD = new Route(460, -20, -2, 1, [
 ]);
 
 let routeU = new Route(20, -20, 2, 10, [
-	{ steps: 1000, ax: 0, ay: -0.1 }
+	{ steps: 1000, ax: 0, ay: -0.12 }
 ]);
 
 let routeV = new Route(460, -20, -2, 10, [
-	{ steps: 1000, ax: 0, ay: -0.1 }
+	{ steps: 1000, ax: 0, ay: -0.11 }
 ]);
 
 let enemyPoints = [
