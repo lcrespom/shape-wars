@@ -1,5 +1,7 @@
 import { Game, GameElement, ElementGroup } from './gamelib/game';
 import { Shape } from './gamelib/shape';
+import { ShapeWarsElements } from './shape-wars';
+import { Explosion } from './explosion';
 
 /** A route is in charge of moving a ship across the canvas, folliwing a
  * given path based on accelleration rules
@@ -129,8 +131,10 @@ export class Enemy implements GameElement {
 			this.route.x, this.route.y, x, y);
 	}
 
-	explode() {
-		// ToDo: animate explosion, etc
+	explode(game: Game) {
+		let elements = game.elements as ShapeWarsElements;
+		elements.explosions.add(new Explosion(
+			{ x: this.route.x, y: this.route.y }));
 		this.dead = true;
 	}
 }

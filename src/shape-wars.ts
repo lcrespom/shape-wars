@@ -8,6 +8,7 @@ export interface ShapeWarsElements extends GameElements {
 	ship: Ship;
 	bullets: ElementGroup;
 	enemies: ElementGroup;
+	explosions: ElementGroup;
 }
 
 export function createElements(canvas): ShapeWarsElements {
@@ -15,6 +16,7 @@ export function createElements(canvas): ShapeWarsElements {
 		stars: new Starfield(canvas),
 		ship: new Ship(canvas),
 		bullets: new ElementGroup(),
-		enemies: new Enemies(canvas)
+		enemies: new Enemies(canvas),
+		explosions: new ElementGroup()
 	};
 }

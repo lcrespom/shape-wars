@@ -3,10 +3,9 @@ A vectorial retro videogame
 
 ## ToDo
 - Enemies
-	- Shapes
-	- Waves
-	- Bullets
-- Explosions
+	- Add more routes
+	- Add more squadrons
+	- Random?
 - Collision detection:
-	- Color-based detection fails miserably
-	- Use Shape center + radius, then refine to pointInPath
+	- Refine to pointInPath
+- Sound

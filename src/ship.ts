@@ -95,7 +95,7 @@ class Bullet implements GameElement {
 		let elements = game.elements as ShapeWarsElements;
 		elements.enemies.find((enemy: Enemy) => {
 			if (enemy.isHit(this.x, this.y)) {
-				enemy.explode();
+				enemy.explode(game);
 				killed = true;
 				return true;
 			}
