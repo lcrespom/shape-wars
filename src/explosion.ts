@@ -17,9 +17,9 @@ interface ExplosionParams {
 
 let defaultParams: ExplosionParams = {
 	x: 0, y: 0, radius: 30,
-	growTicks: 12, shrinkTicks: 60,
+	growTicks: 12, shrinkTicks: 40,
 	fillStyle: '', strokeStyle: 'white',
-	rays: 12
+	rays: 6
 };
 
 export class Explosion implements GameElement {
@@ -53,7 +53,7 @@ export class Explosion implements GameElement {
 		game.gc.beginPath();
 		for (let i = 0; i < this.params.rays; i++) {
 			game.gc.moveTo(0, 0);
-			game.gc.lineTo(this.radius * Math.random(), 0);
+			game.gc.lineTo(this.radius * (0.5 + Math.random() / 2), 0);
 			game.gc.rotate(angle);
 		}
 		game.gc.stroke();
