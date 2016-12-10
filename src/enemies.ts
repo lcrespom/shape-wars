@@ -34,34 +34,44 @@ class Route {
 }
 
 
-let route1 = new Route(20, -20, 2, 1, [
+let routeC = new Route(20, -20, 2, 1, [
 	{ steps: 36, ax: 0.2, ay: 0.1 },
 	{ steps: 100, ax: -0.2, ay: 0 }
 ]);
 
-let route2 = new Route(460, -20, -2, 1, [
+let routeD = new Route(460, -20, -2, 1, [
 	{ steps: 36, ax: -0.2, ay: 0.1 },
 	{ steps: 100, ax: 0.2, ay: 0 }
 ]);
 
+let routeU = new Route(20, -20, 2, 10, [
+	{ steps: 1000, ax: 0, ay: -0.1 }
+]);
+
+let routeV = new Route(460, -20, -2, 10, [
+	{ steps: 1000, ax: 0, ay: -0.1 }
+]);
+
+let enemyPoints = [
+	{ x: 0, y: 0 },
+	{ x: 30, y: 0 },
+	{ x: 20, y: 30 },
+	{ x: 10, y: 30 }
+];
+
 let enemyShape1 = new Shape([{
 	fillStyle: '#FF0040',
-	points: [
-		{ x: 0, y: 0 },
-		{ x: 30, y: 0 },
-		{ x: 20, y: 30 },
-		{ x: 10, y: 30 }
-	]
+	points: enemyPoints
 }]);
 
 let enemyShape2 = new Shape([{
-	fillStyle: '#FF00C0',
-	points: [
-		{ x: 0, y: 0 },
-		{ x: 30, y: 0 },
-		{ x: 20, y: 30 },
-		{ x: 10, y: 30 }
-	]
+	fillStyle: '#FF0080',
+	points: enemyPoints
+}]);
+
+let enemyShape3 = new Shape([{
+	fillStyle: '#FF00FF',
+	points: enemyPoints
 }]);
 
 
@@ -94,8 +104,10 @@ class Squadron extends ElementGroup {
 export class Enemies extends ElementGroup {
 	constructor(canvas) {
 		super();
-		this.add(new Squadron(route1, enemyShape1, 5, 20));
-		this.add(new Squadron(route2, enemyShape2, 5, 20, 30));
+		this.add(new Squadron(routeU, enemyShape3, 5, 20));
+		this.add(new Squadron(routeV, enemyShape2, 5, 20, 120));
+		this.add(new Squadron(routeC, enemyShape1, 5, 20, 250));
+		this.add(new Squadron(routeD, enemyShape2, 5, 20, 350));
 	}
 }
 
@@ -115,7 +127,10 @@ export class Enemy implements GameElement {
 	}
 
 	calcAngle(): number {
-		return - Math.atan(this.route.speedX / this.route.speedY);
+		let angle = - Math.atan(this.route.speedX / this.route.speedY);
+		if (this.route.speedY < 0)
+			angle = angle - Math.PI;
+		return angle;
 	}
 
 	move(canvas: HTMLCanvasElement) {

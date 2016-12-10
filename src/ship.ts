@@ -3,6 +3,7 @@ import { Shape } from './gamelib/shape';
 import { isKeyPressed } from './gamelib/keyboard';
 import { ShapeWarsElements } from './shape-wars';
 import { Enemy } from './enemies';
+import { Explosion } from './explosion';
 
 const KEY_LEFT = 90;
 const KEY_RIGHT = 88;
@@ -31,6 +32,8 @@ export class Ship implements GameElement {
 	y: number;
 	shape: Shape;
 	canFire = true;
+	dead = false;
+	lives = 3;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.x = canvas.width / 2;
@@ -39,11 +42,15 @@ export class Ship implements GameElement {
 	}
 
 	step(game: Game) {
+		if (this.dead) return;
 		this.move(game);
 		this.fire(game);
+		if (this.hitByEnemy(game))
+			this.die(game);
 	}
 
 	draw(game: Game) {
+		if (this.dead) return;
 		this.shape.draw(game.gc, this.x, this.y);
 	}
 
@@ -66,6 +73,32 @@ export class Ship implements GameElement {
 		else {
 			this.canFire = true;
 		}
+	}
+
+	hitByEnemy(game: Game): boolean {
+		let killed = false;
+		let elements = game.elements as ShapeWarsElements;
+		elements.enemies.find((enemy: Enemy) => {
+			for (let point of this.shape.paths[0].points) {
+				if (enemy.isHit(this.x + point.x, this.y + point.y)) {
+					killed = true;
+					return true;
+				}
+			}
+			return false;
+		});
+		return killed;
+	}
+
+	die(game: Game) {
+		let elements = game.elements as ShapeWarsElements;
+		elements.explosions.add(new Explosion({
+			x: this.x, y: this.y, radius: 50
+		}));
+		this.dead = true;
+		this.lives--;
+		// if (this.lives <= 0)
+		// 	game.gameOver();
 	}
 }
 
