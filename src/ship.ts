@@ -14,7 +14,7 @@ const KEY_FIRE = 77;
 const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
 const BULLET_SPEED = 8;
-const DYING_TICKS = 120;
+const DYING_TICKS = 180;
 
 let shipPaths = [{
 	fillStyle: 'rgb(0, 192, 128)',
@@ -37,6 +37,7 @@ export class Ship implements GameElement {
 	lives = 3;
 	diect: number;
 	gameOver = false;
+	startWave = true;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.x = canvas.width / 2;
@@ -50,7 +51,10 @@ export class Ship implements GameElement {
 			if (this.diect <= 0) {
 				if (this.lives <= 0)
 					this.gameOver = true;
-				else this.dead = false;
+				else {
+					this.dead = false;
+					this.startWave = true;
+				}
 			}
 		}
 		else {

@@ -1,26 +1,27 @@
 import { setupKeyboard, isKeyPressed } from './gamelib/keyboard';
-import { Game } from './gamelib/game';
-import { createElements } from './shape-wars';
+import { ShapeWars } from './shape-wars';
+
+const RESET_KEY = 82;
 
 
-function initGame(): Game {
+function initGame() {
 	setupKeyboard();
 	let canvas = $('#game-canvas')[0] as HTMLCanvasElement;
-	let game = new Game(canvas, createElements(canvas));
-	return game;
+	let shapeWars = new ShapeWars(canvas);
+	return shapeWars;
 }
 
 function runGame() {
 	let fpsct = 0;
-	let game = initGame();
-	game.loop(() => {
+	let shapeWars = initGame();
+	shapeWars.loop(() => {
 		if ((++fpsct) == 30) {
 			fpsct = 0;
-			$('#fps').text(Math.round(game.fps));
-			$('#cpu').text(Math.round(game.cpu * 100));
+			$('#fps').text(Math.round(shapeWars.game.fps));
+			$('#cpu').text(Math.round(shapeWars.game.cpu * 100));
 		}
-		if (isKeyPressed(82))
-			game.elements = createElements(game.canvas);
+		if (isKeyPressed(RESET_KEY))
+			shapeWars.reset();
 	});
 }
 
