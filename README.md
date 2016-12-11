@@ -3,7 +3,7 @@ A vectorial retro videogame
 
 ## ToDo
 - Status display
-	- Ships
+	- Ships (done)
 	- Score
 	- Game Over
 	- Start of wave
