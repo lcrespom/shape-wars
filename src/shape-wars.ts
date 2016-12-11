@@ -3,6 +3,7 @@ import { Starfield } from './stars';
 import { StatusDisplay } from './status-display';
 import { Ship } from './ship';
 import { Enemies } from './enemies';
+import { Sounds } from './sounds';
 
 
 export interface ShapeWarsElements extends GameElements {
@@ -12,14 +13,17 @@ export interface ShapeWarsElements extends GameElements {
 	bullets: ElementGroup;
 	enemies: ElementGroup;
 	explosions: ElementGroup;
+	sounds: Sounds;
 }
 
 
 export class ShapeWars {
 	game: Game;
 	elements: ShapeWarsElements;
+	sounds: Sounds;
 
 	constructor(canvas: HTMLCanvasElement) {
+		this.sounds = new Sounds();
 		this.createElements(canvas);
 		this.game = new Game(canvas, this.elements);
 	}
@@ -33,10 +37,7 @@ export class ShapeWars {
 
 	step() {
 		let ship = this.elements.ship;
-		if (ship.gameOver) {
-			// ToDo: display "G A M E   O V E R"
-		}
-		else if (ship.startWave) {
+		if (ship.startWave) {
 			ship.startWave = false;
 			this.elements.enemies = new Enemies(this.game.canvas);
 		}
@@ -54,7 +55,8 @@ export class ShapeWars {
 			ship: new Ship(canvas),
 			bullets: new ElementGroup(),
 			enemies: new Enemies(canvas),
-			explosions: new ElementGroup()
+			explosions: new ElementGroup(),
+			sounds: this.sounds
 		};
 	}
 }

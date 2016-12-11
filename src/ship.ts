@@ -87,6 +87,7 @@ export class Ship implements GameElement {
 			this.canFire = false;
 			let elements = game.elements as ShapeWarsElements;
 			elements.bullets.add(new Bullet(this.x, this.y - 15));
+			elements.sounds.pew();
 		}
 		else {
 			this.canFire = true;
