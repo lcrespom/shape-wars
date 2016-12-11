@@ -3,6 +3,8 @@ import { ElementGroup } from './gamelib/game';
 import jsonPew from './static/pew';
 import jsonEnemyExplode from './static/enemy-explode';
 import jsonShipExplode from './static/ship-explode';
+import jsonGameOver from './static/tesla';
+import jsonGameStart from './static/space';
 
 
 declare class Window {
@@ -18,6 +20,8 @@ export class Sounds extends ElementGroup {
 	sndPew: SoundEffect;
 	sndEnemyExplode: SoundEffect;
 	sndShipExplode: SoundEffect;
+	sndGameStart: SoundEffect;
+	sndGameOver: SoundEffect;
 
 	constructor() {
 		super();
@@ -25,6 +29,8 @@ export class Sounds extends ElementGroup {
 		this.sndPew = new SoundEffect(ac, jsonPew, 4);
 		this.sndEnemyExplode = new SoundEffect(ac, jsonEnemyExplode, 4);
 		this.sndShipExplode = new SoundEffect(ac, jsonShipExplode, 1);
+		this.sndGameStart = new SoundEffect(ac, jsonGameStart, 3);
+		this.sndGameOver = new SoundEffect(ac, jsonGameOver, 3);
 	}
 
 	createAudioContext(): AudioContext {
@@ -42,6 +48,14 @@ export class Sounds extends ElementGroup {
 
 	shipExplode() {
 		this.sndShipExplode.play();
+	}
+
+	gameStart() {
+		//this.sndGameStart.play();
+	}
+
+	gameOver() {
+		//this.sndGameOver.play();
 	}
 }
 
