@@ -116,6 +116,7 @@ export class Ship implements GameElement {
 		elements.explosions.add(new Explosion({
 			x: this.x, y: this.y, radius: 50
 		}));
+		elements.sounds.shipExplode();
 		this.diect = DYING_TICKS;
 		this.dead = true;
 		this.lives--;

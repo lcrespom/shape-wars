@@ -23,4 +23,4 @@ export default {
 	keyboard: {
 		portamento: 0, octave: 4, arpeggio: { bpm: 60, mode: 0, octave: 1 }
 	}
-}
+};

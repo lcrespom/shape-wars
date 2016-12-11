@@ -1,5 +1,8 @@
 import { ElementGroup } from './gamelib/game';
+
 import jsonPew from './static/pew';
+import jsonEnemyExplode from './static/enemy-explode';
+import jsonShipExplode from './static/ship-explode';
 
 
 declare class Window {
@@ -13,11 +16,15 @@ declare let window: Window;
 
 export class Sounds extends ElementGroup {
 	sndPew: SoundEffect;
+	sndEnemyExplode: SoundEffect;
+	sndShipExplode: SoundEffect;
 
 	constructor() {
 		super();
 		let ac = this.createAudioContext();
-		this.sndPew = new SoundEffect(ac, jsonPew, 8);
+		this.sndPew = new SoundEffect(ac, jsonPew, 4);
+		this.sndEnemyExplode = new SoundEffect(ac, jsonEnemyExplode, 4);
+		this.sndShipExplode = new SoundEffect(ac, jsonShipExplode, 1);
 	}
 
 	createAudioContext(): AudioContext {
@@ -27,6 +34,14 @@ export class Sounds extends ElementGroup {
 
 	pew() {
 		this.sndPew.play();
+	}
+
+	enemyExplode() {
+		this.sndEnemyExplode.play();
+	}
+
+	shipExplode() {
+		this.sndShipExplode.play();
 	}
 }
 
@@ -39,7 +54,7 @@ class SoundEffect {
 	}
 
 	play() {
-		//this.i.noteOff(57);
+		this.i.noteOff(57);
 		this.i.noteOn(57);
 	}
 }

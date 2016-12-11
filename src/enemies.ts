@@ -155,6 +155,7 @@ export class Enemy implements GameElement {
 		let elements = game.elements as ShapeWarsElements;
 		elements.explosions.add(new Explosion(
 			{ x: this.route.x, y: this.route.y }));
+		elements.sounds.enemyExplode();
 		this.dead = true;
 	}
 }
