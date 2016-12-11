@@ -1,8 +1,5 @@
 import { Game, GameElement } from './gamelib/game';
 
-declare class Object {
-	static assign(target, ...objs);
-}
 
 interface ExplosionParams {
 	x: number;

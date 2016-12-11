@@ -42,12 +42,14 @@ export class Shape {
 		}));
 	}
 
-	draw(gc: CanvasRenderingContext2D, x: number, y: number, angle = 0) {
+	draw(gc: CanvasRenderingContext2D, x: number, y: number,
+		angle = 0, scaleX = 1, scaleY = scaleX) {
 		for (let path of this.paths) {
 			gc.beginPath();
 			gc.fillStyle = path.fillStyle;
 			gc.translate(x, y);
 			if (angle) gc.rotate(angle);
+			if (scaleX != 1 || scaleY != 1) gc.scale(scaleX, scaleY);
 			gc.moveTo(path.points[0].x, path.points[0].y);
 			for (let i = 1; i < path.points.length; i++)
 				gc.lineTo(path.points[i].x, path.points[i].y);
