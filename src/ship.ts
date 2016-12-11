@@ -15,6 +15,7 @@ const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
 const BULLET_SPEED = 8;
 const DYING_TICKS = 180;
+const ENEMY_SCORE = 100;
 
 let shipPaths = [{
 	fillStyle: 'rgb(0, 192, 128)',
@@ -38,6 +39,7 @@ export class Ship implements GameElement {
 	diect: number;
 	gameOver = false;
 	startWave = true;
+	score = 0;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.x = canvas.width / 2;
@@ -153,6 +155,7 @@ class Bullet implements GameElement {
 		elements.enemies.find((enemy: Enemy) => {
 			if (enemy.isHit(this.x, this.y)) {
 				enemy.explode(game);
+				elements.ship.score += ENEMY_SCORE;
 				killed = true;
 				return true;
 			}
