@@ -16,7 +16,8 @@ export default {
 		{ type: 'Oscillator', params: { frequency: 140, detune: 0, type: 'sawtooth' } },
 		{ type: 'Oscillator', params: { frequency: 140, detune: 10, type: 'sawtooth' } },
 		{ type: 'Gain', params: { gain: 0.32 } },
-		{ type: 'ADSR', params: { attack: 0, decay: 0.5, sustain: 1, release: 2, depth: 0.999 }, controlParam: 'frequency', controlParams: ['frequency', 'Q', 'detune', 'gain'] },
+		{ type: 'ADSR', params: { attack: 0, decay: 0.5, sustain: 1, release: 2, depth: 0.999 },
+			controlParam: 'frequency', controlParams: ['frequency', 'Q', 'detune', 'gain'] },
 		{ type: 'Delay', params: { delayTime: 0.05 } },
 		{ type: 'StereoPan', params: { pan: 0 } },
 		{ type: 'LFO', params: { frequency: 0.44422, detune: 0, type: 'sine' }, controlParam: 'pan', controlParams: ['pan'] }

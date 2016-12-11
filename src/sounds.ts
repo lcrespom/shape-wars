@@ -1,4 +1,4 @@
-import { ElementGroup } from './gamelib/game';
+import { Game, GameElement, ElementGroup } from './gamelib/game';
 
 import jsonPew from './static/pew';
 import jsonEnemyExplode from './static/enemy-explode';
@@ -7,30 +7,38 @@ import jsonGameOver from './static/tesla';
 import jsonGameStart from './static/space';
 
 
+interface Instrument {
+	noteOn(midi: number, velocity?: number): void;
+	noteOff(midi: number, velocity?: number): void;
+}
+
 declare class Window {
 	AudioContext: any;
 	webkitAudioContext: any;
-	Modulator: any;
+	Modulator: {
+		Instrument: any;
+	};
 }
 
 declare let window: Window;
 
 
 export class Sounds extends ElementGroup {
-	sndPew: SoundEffect;
-	sndEnemyExplode: SoundEffect;
-	sndShipExplode: SoundEffect;
-	sndGameStart: SoundEffect;
-	sndGameOver: SoundEffect;
+	iPew: Instrument;
+	iEnemyExplode: Instrument;
+	iShipExplode: Instrument;
+	iGameStart: Instrument;
+	iGameOver: Instrument;
 
 	constructor() {
 		super();
 		let ac = this.createAudioContext();
-		this.sndPew = new SoundEffect(ac, jsonPew, 4);
-		this.sndEnemyExplode = new SoundEffect(ac, jsonEnemyExplode, 4);
-		this.sndShipExplode = new SoundEffect(ac, jsonShipExplode, 1);
-		this.sndGameStart = new SoundEffect(ac, jsonGameStart, 3);
-		this.sndGameOver = new SoundEffect(ac, jsonGameOver, 3);
+		let MInstrument = window.Modulator.Instrument;
+		this.iPew = new MInstrument(ac, jsonPew, 4);
+		this.iEnemyExplode = new MInstrument(ac, jsonEnemyExplode, 4);
+		this.iShipExplode = new MInstrument(ac, jsonShipExplode, 1);
+		this.iGameStart = new MInstrument(ac, jsonGameStart, 3);
+		this.iGameOver = new MInstrument(ac, jsonGameOver, 3);
 	}
 
 	createAudioContext(): AudioContext {
@@ -38,37 +46,64 @@ export class Sounds extends ElementGroup {
 		return new CtxClass();
 	}
 
+	soundNote(instrument: Instrument, note = 57) {
+		instrument.noteOff(57);
+		instrument.noteOn(57);
+	}
+
 	pew() {
-		this.sndPew.play();
+		this.soundNote(this.iPew);
 	}
 
 	enemyExplode() {
-		this.sndEnemyExplode.play();
+		this.soundNote(this.iEnemyExplode);
 	}
 
 	shipExplode() {
-		this.sndShipExplode.play();
+		this.soundNote(this.iShipExplode);
 	}
 
 	gameStart() {
-		//this.sndGameStart.play();
+		// this.sndGameStart.play();
 	}
 
 	gameOver() {
-		//this.sndGameOver.play();
+		this.add(new NoteSequence(this.iGameOver, [
+			{ steps: 60, on: 57 },
+			{ steps: 60, off: 57, on: 50 },
+			{ steps: 0, off: 50 }
+		]));
 	}
 }
 
 
-class SoundEffect {
-	i: any;
+interface NoteData {
+	steps: number;
+	on?: number;
+	off?: number;
+}
 
-	constructor(ac, json: any, voices: number) {
-		this.i = new window.Modulator.Instrument(ac, json, voices);
-	}
 
-	play() {
-		this.i.noteOff(57);
-		this.i.noteOn(57);
+class NoteSequence implements GameElement {
+	idx = -0;
+	stepct = 0;
+	dead = false;
+
+	constructor(public instrument, public notes: NoteData[]) {}
+
+	draw(game: Game) {}
+
+	step(game: Game) {
+		this.stepct--;
+		if (this.stepct > 0) return;
+		let note = this.notes[this.idx];
+		if (note.off)
+			this.instrument.noteOff(note.off);
+		if (note.on)
+			this.instrument.noteOn(note.on);
+		this.stepct = note.steps;
+		this.idx++;
+		if (this.idx >= this.notes.length)
+			this.dead = true;
 	}
 }
