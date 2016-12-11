@@ -14,6 +14,7 @@ const KEY_FIRE = 77;
 const BULLET_LENGTH = 6;
 const BULLET_STROKE_STYLE = 'white';
 const BULLET_SPEED = 8;
+const DYING_TICKS = 120;
 
 let shipPaths = [{
 	fillStyle: 'rgb(0, 192, 128)',
@@ -34,6 +35,8 @@ export class Ship implements GameElement {
 	canFire = true;
 	dead = false;
 	lives = 3;
+	diect: number;
+	gameOver = false;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.x = canvas.width / 2;
@@ -42,11 +45,20 @@ export class Ship implements GameElement {
 	}
 
 	step(game: Game) {
-		if (this.dead) return;
-		this.move(game);
-		this.fire(game);
-		if (this.hitByEnemy(game))
-			this.die(game);
+		if (this.dead) {
+			this.diect--;
+			if (this.diect <= 0) {
+				if (this.lives <= 0)
+					this.gameOver = true;
+				else this.dead = false;
+			}
+		}
+		else {
+			this.move(game);
+			this.fire(game);
+			if (this.hitByEnemy(game))
+				this.die(game);
+		}
 	}
 
 	draw(game: Game) {
@@ -79,6 +91,8 @@ export class Ship implements GameElement {
 		let killed = false;
 		let elements = game.elements as ShapeWarsElements;
 		elements.enemies.find((enemy: Enemy) => {
+			if (!near(this.x, this.y, this.shape.radius,
+				enemy.route.x, enemy.route.y, enemy.shape.radius)) return false;
 			for (let point of this.shape.paths[0].points) {
 				if (enemy.isHit(this.x + point.x, this.y + point.y)) {
 					killed = true;
@@ -95,11 +109,17 @@ export class Ship implements GameElement {
 		elements.explosions.add(new Explosion({
 			x: this.x, y: this.y, radius: 50
 		}));
+		this.diect = DYING_TICKS;
 		this.dead = true;
 		this.lives--;
-		// if (this.lives <= 0)
-		// 	game.gameOver();
 	}
+}
+
+
+function near(x1, y1, r1, x2, y2, r2) {
+	let sqr = x => x * x;
+	let dist = Math.sqrt(sqr(x1 - x2) + sqr(y1 - y2));
+	return dist <= r1 + r2;
 }
 
 

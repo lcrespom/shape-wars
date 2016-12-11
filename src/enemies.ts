@@ -9,6 +9,8 @@ import { Explosion } from './explosion';
 class Route {
 	step = 0;
 	part = 0;
+	ax = 0;
+	ay = 0;
 
 	constructor(public x: number, public y: number,
 		public speedX: number, public speedY: number,
@@ -23,8 +25,8 @@ class Route {
 		this.y += this.speedY;
 		if (this.part >= this.parts.length) return;
 		let segment = this.parts[this.part];
-		this.speedX += segment.ax;
-		this.speedY += segment.ay;
+		this.speedX += this.ax ? this.ax : segment.ax;
+		this.speedY += this.ay ? this.ay : segment.ay;
 		this.step++;
 		if (this.step > segment.steps) {
 			this.step = 0;
@@ -119,6 +121,9 @@ export class Enemy implements GameElement {
 	}
 
 	step(game: Game) {
+		let elements = game.elements as ShapeWarsElements;
+		if (elements.ship.dead)
+			this.route.ay = -0.2;
 		this.move(game.canvas);
 	}
 
@@ -129,7 +134,7 @@ export class Enemy implements GameElement {
 	calcAngle(): number {
 		let angle = - Math.atan(this.route.speedX / this.route.speedY);
 		if (this.route.speedY < 0)
-			angle = angle - Math.PI;
+			angle += Math.PI;
 		return angle;
 	}
 
