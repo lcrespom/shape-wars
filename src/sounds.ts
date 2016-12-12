@@ -1,10 +1,5 @@
 import { Game, GameElement, ElementGroup } from './gamelib/game';
-
-import jsonPew from './static/pew';
-import jsonEnemyExplode from './static/enemy-explode';
-import jsonShipExplode from './static/ship-explode';
-import jsonGameOver from './static/tesla';
-import jsonGameStart from './static/space';
+import sounds from './static/sounds';
 
 
 interface Instrument {
@@ -34,11 +29,11 @@ export class Sounds extends ElementGroup {
 		super();
 		let ac = this.createAudioContext();
 		let MInstrument = window.Modulator.Instrument;
-		this.iPew = new MInstrument(ac, jsonPew, 4);
-		this.iEnemyExplode = new MInstrument(ac, jsonEnemyExplode, 4);
-		this.iShipExplode = new MInstrument(ac, jsonShipExplode, 1);
-		this.iGameStart = new MInstrument(ac, jsonGameStart, 3);
-		this.iGameOver = new MInstrument(ac, jsonGameOver, 3);
+		this.iPew = new MInstrument(ac, sounds.pew, 4);
+		this.iEnemyExplode = new MInstrument(ac, sounds.enemyExplode, 4);
+		this.iShipExplode = new MInstrument(ac, sounds.shipExplode, 1);
+		this.iGameStart = new MInstrument(ac, sounds.gameStart, 3);
+		this.iGameOver = new MInstrument(ac, sounds.gameOver, 3);
 	}
 
 	createAudioContext(): AudioContext {
