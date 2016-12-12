@@ -106,10 +106,10 @@ class Squadron extends ElementGroup {
 export class Enemies extends ElementGroup {
 	constructor(canvas) {
 		super();
-		this.add(new Squadron(routeU, enemyShape3, 5, 20));
-		this.add(new Squadron(routeV, enemyShape2, 5, 20, 120));
-		this.add(new Squadron(routeC, enemyShape1, 5, 20, 250));
-		this.add(new Squadron(routeD, enemyShape2, 5, 20, 350));
+		this.add(new Squadron(routeU, enemyShape3, 5, 20, 120));
+		this.add(new Squadron(routeV, enemyShape2, 5, 20, 240));
+		this.add(new Squadron(routeC, enemyShape1, 5, 20, 370));
+		this.add(new Squadron(routeD, enemyShape2, 5, 20, 470));
 	}
 }
 

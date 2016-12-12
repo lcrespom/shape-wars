@@ -64,14 +64,24 @@ export class Sounds extends ElementGroup {
 	}
 
 	gameStart() {
-		// this.sndGameStart.play();
+		this.add(new NoteSequence(this.iGameOver, [
+			{ steps: 20, on: 48 },
+			{ steps: 20, on: 55 },
+			{ steps: 20, on: 60 },
+			{ steps: 0, off: 48 },
+			{ steps: 0, off: 55 },
+			{ steps: 0, off: 60 }
+		]));
 	}
 
 	gameOver() {
 		this.add(new NoteSequence(this.iGameOver, [
-			{ steps: 60, on: 57 },
-			{ steps: 60, off: 57, on: 50 },
-			{ steps: 0, off: 50 }
+			{ steps: 30, on: 47 },
+			{ steps: 30, off: 47 },
+			{ steps: 30, on: 41 },
+			{ steps: 30, off: 41 },
+			{ steps: 30, on: 36 },
+			{ steps: 0, off: 36 }
 		]));
 	}
 }
@@ -102,6 +112,8 @@ class NoteSequence implements GameElement {
 		if (note.on)
 			this.instrument.noteOn(note.on);
 		this.stepct = note.steps;
+		// ToDo: if stepct == 0, immediately play next note
+		// ToDo: investigante incorrect notes
 		this.idx++;
 		if (this.idx >= this.notes.length)
 			this.dead = true;

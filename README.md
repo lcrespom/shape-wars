@@ -11,4 +11,3 @@ A vectorial retro videogame
 	- Enemy waves / restart current wave after dying
 - Collision detection:
 	- Refine to pointInPath
-- Sound
