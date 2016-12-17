@@ -1,6 +1,7 @@
 import { Game, ElementGroup } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 import { Enemy } from './enemies';
+import { enemyShapes, enemyRoutes } from './static/waves';
 
 
 /** A route is in charge of moving a ship across the canvas, folliwing a
@@ -41,6 +42,7 @@ export class Route {
  */
 export class Squadron extends ElementGroup {
 	stepct: number;
+	dead = false;
 
 	constructor(public route: Route, public shape: Shape,
 		public ships: number, public steps: number, delay = 0) {
@@ -50,7 +52,10 @@ export class Squadron extends ElementGroup {
 
 	step(game: Game) {
 		super.step(game);
-		if (this.ships <= 0) return;
+		if (this.ships <= 0) {
+			this.dead = this.items.every(e => !!e.dead);
+			return;
+		}
 		this.stepct++;
 		if (this.stepct >= this.steps) {
 			this.stepct = 0;
@@ -59,5 +64,3 @@ export class Squadron extends ElementGroup {
 		}
 	}
 }
-
-

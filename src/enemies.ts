@@ -3,17 +3,25 @@ import { Shape } from './gamelib/shape';
 import { ShapeWarsElements } from './shape-wars';
 import { Explosion } from './explosion';
 import { Route, Squadron } from './wave';
-import waves from './static/waves';
+import { initWave } from './static/waves';
 
 
 /** The living set of enemy ships in the game */
 export class Enemies extends ElementGroup {
-	constructor(canvas) {
+	endWave = false;
+
+	constructor(waveNum: number) {
 		super();
-		for (let sq of waves.squadrons)
+		let squadrons = initWave(waveNum);
+		for (let sq of squadrons)
 			this.add(
 				new Squadron(sq.route, sq.shape, sq.ships, sq.steps, sq.delay)
 			);
+	}
+
+	step(game: Game) {
+		super.step(game);
+		this.endWave = this.items.length == 0;
 	}
 }
 

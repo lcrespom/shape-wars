@@ -11,7 +11,7 @@ export interface ShapeWarsElements extends GameElements {
 	status: StatusDisplay;
 	ship: Ship;
 	bullets: ElementGroup;
-	enemies: ElementGroup;
+	enemies: Enemies;
 	explosions: ElementGroup;
 	sounds: Sounds;
 }
@@ -22,6 +22,7 @@ export class ShapeWars {
 	elements: ShapeWarsElements;
 	sounds: Sounds;
 	playedGameOver = false;
+	wave = 1;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.sounds = new Sounds();
@@ -37,19 +38,29 @@ export class ShapeWars {
 	}
 
 	step() {
+		if (this.playedGameOver) return;
 		let ship = this.elements.ship;
 		if (ship.startWave) {
 			ship.startWave = false;
-			this.sounds.gameStart();
-			this.elements.enemies = new Enemies(this.game.canvas);
+			this.startWave();
 		}
-		if (ship.gameOver && !this.playedGameOver) {
+		else if (ship.gameOver) {
 			this.sounds.gameOver();
 			this.playedGameOver = true;
 		}
+		else if (this.elements.enemies.endWave) {
+			this.wave++;
+			this.startWave();
+		}
+	}
+
+	startWave() {
+		this.sounds.gameStart();
+		this.elements.enemies = new Enemies(this.wave);
 	}
 
 	reset() {
+		this.wave = 1;
 		this.createElements(this.game.canvas);
 		this.game.elements = this.elements;
 		this.playedGameOver = false;
@@ -61,7 +72,7 @@ export class ShapeWars {
 			status: new StatusDisplay(),
 			ship: new Ship(canvas),
 			bullets: new ElementGroup(),
-			enemies: new Enemies(canvas),
+			enemies: new Enemies(this.wave),
 			explosions: new ElementGroup(),
 			sounds: this.sounds
 		};
