@@ -1,7 +1,6 @@
 import { Game, ElementGroup } from './gamelib/game';
 import { Shape } from './gamelib/shape';
 import { Enemy } from './enemies';
-import { enemyShapes, enemyRoutes } from './static/waves';
 
 
 /** A route is in charge of moving a ship across the canvas, folliwing a

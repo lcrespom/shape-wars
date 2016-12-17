@@ -26,7 +26,7 @@ function initShapes(): Shape[] {
 	return shapes;
 }
 
-export let enemyShapes = initShapes();
+let enemyShapes = initShapes();
 
 
 // -------------------- Enemy routes --------------------
@@ -69,7 +69,7 @@ let routeQ = new Route(460, -20, -5.5, 11, [
 	{ steps: 500, ax: 0.06, ay: 0.16 },
 ]);
 
-export let enemyRoutes = [
+let enemyRoutes = [
 	routeO, routeQ, routeN, routeИ, routeU, routeV, routeC, routeD
 ];
 
