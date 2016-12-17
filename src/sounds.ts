@@ -58,7 +58,7 @@ export class Sounds extends ElementGroup {
 		this.soundNote(this.iShipExplode);
 	}
 
-	gameStart() {
+	waveStart() {
 		this.add(new NoteSequence(this.iGameOver, [
 			{ steps: 20, on: 48 },
 			{ steps: 20, on: 55 },

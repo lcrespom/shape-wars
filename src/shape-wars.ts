@@ -55,7 +55,7 @@ export class ShapeWars {
 	}
 
 	startWave() {
-		this.sounds.gameStart();
+		this.sounds.waveStart();
 		this.elements.enemies = new Enemies(this.wave);
 	}
 

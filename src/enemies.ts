@@ -9,10 +9,11 @@ import { initWave } from './static/waves';
 /** The living set of enemy ships in the game */
 export class Enemies extends ElementGroup {
 	endWave = false;
+	wavect = 100;
 
-	constructor(waveNum: number) {
+	constructor(public wave: number) {
 		super();
-		let squadrons = initWave(waveNum);
+		let squadrons = initWave(wave);
 		for (let sq of squadrons)
 			this.add(
 				new Squadron(sq.route, sq.shape, sq.ships, sq.steps, sq.delay)
@@ -22,6 +23,8 @@ export class Enemies extends ElementGroup {
 	step(game: Game) {
 		super.step(game);
 		this.endWave = this.items.length == 0;
+		if (this.wavect > 0)
+			this.wavect--;
 	}
 }
 

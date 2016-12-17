@@ -1,6 +1,12 @@
 import { Game, GameElement, ElementGroup } from './gamelib/game';
 import { ShapeWarsElements } from './shape-wars';
 
+/*
+Cool fonts:
+	https://fonts.google.com/selection?
+		category=Display,Monospace&
+		selection.family=Electrolize|Geostar+Fill|Kelly+Slab|Press+Start+2P|Revalia|VT323
+*/
 
 export class StatusDisplay extends ElementGroup {
 	constructor() {
@@ -25,12 +31,6 @@ class ShipsDisplay implements GameElement {
 
 
 class Scoring implements GameElement {
-	/*
-	Cool fonts:
-		https://fonts.google.com/selection?
-			category=Display,Monospace&
-			selection.family=Electrolize|Geostar+Fill|Kelly+Slab|Press+Start+2P|Revalia|VT323
-	 */
 	step(game: Game) {}
 
 	draw(game: Game) {
@@ -47,9 +47,12 @@ class Messages implements GameElement {
 	step(game: Game) {}
 
 	draw(game: Game) {
-		let gameOver = (game.elements as ShapeWarsElements).ship.gameOver;
-		if (!gameOver) return;
-		this.centerText(game.gc, 'GAME OVER', 50);
+		let elements = game.elements as ShapeWarsElements;
+		let gameOver = elements.ship.gameOver;
+		if (gameOver)
+			this.centerText(game.gc, 'GAME OVER', 50);
+		else if (elements.enemies.wavect)
+			this.centerText(game.gc, 'WAVE  ' + elements.enemies.wave, 30);
 	}
 
 	centerText(gc: CanvasRenderingContext2D, txt: string, size: number) {
