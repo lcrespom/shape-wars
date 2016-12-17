@@ -49,12 +49,16 @@ class Messages implements GameElement {
 	draw(game: Game) {
 		let gameOver = (game.elements as ShapeWarsElements).ship.gameOver;
 		if (!gameOver) return;
-		let txt = 'GAME OVER';
-		prepareFont(game.gc, 50);
-		let w = game.gc.measureText(txt).width;
-		let x = game.gc.canvas.width / 2 - w / 2;
-		let y = game.gc.canvas.height / 2;
-		game.gc.fillText(txt, x, y);
+		this.centerText(game.gc, 'GAME OVER', 50);
+	}
+
+	centerText(gc: CanvasRenderingContext2D, txt: string, size: number) {
+		prepareFont(gc, size);
+		let w = gc.measureText(txt).width;
+		let x = gc.canvas.width / 2 - w / 2;
+		let y = gc.canvas.height / 2;
+		gc.fillText(txt, x, y);
+
 	}
 }
 
