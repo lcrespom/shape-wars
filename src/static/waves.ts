@@ -2,8 +2,6 @@ import { Shape } from '../gamelib/shape';
 import { Route } from '../wave';
 
 
-// -------------------- Enemy shapes and colors --------------------
-
 function shuffle(aIn: any[]): any[] {
 	let a = [...aIn];	// Copy array to make function pure
 	for (let i = a.length; i; i--) {
@@ -12,6 +10,9 @@ function shuffle(aIn: any[]): any[] {
 	}
 	return a;
 }
+
+
+// -------------------- Enemy shapes and colors --------------------
 
 let fillStyles = [
 	'#FF0040', '#FF0080', '#FF00FF', '#4080FF'
@@ -68,24 +69,24 @@ let routeN = new Route(460, -20, -2, 11, [
 	{ steps: 500, ax: 0, ay: 0.14 },
 ]);
 
-let enemyRoutes = [
-	routeN, routeИ, routeU, routeV, routeC, routeD
-];
+let routeO = new Route(20, -20, 5.5, 11, [
+	{ steps: 130, ax: -0.04, ay: -0.13 },
+	{ steps: 500, ax: -0.06, ay: 0.16 },
+]);
 
-/* ToDo:
-	- Routes: loop / inverted loop
-	- Random entry point for routes (within a range)
-	- Fully random routes
-	- Random squadron selection
-	- Waves!
-	- Boss wave :-)
-	- Create harder version of existing route by multiplying speed & acceleration
-*/
+let routeQ = new Route(460, -20, -5.5, 11, [
+	{ steps: 130, ax: 0.04, ay: -0.13 },
+	{ steps: 500, ax: 0.06, ay: 0.16 },
+]);
+
+let enemyRoutes = [
+	routeO, routeQ, routeN, routeИ, routeU, routeV, routeC, routeD
+];
 
 function initWave(w: number) {
 	let squadrons: any[] = [];
 	let i = 0;
-	for (let route of enemyRoutes) {
+	for (let route of shuffle(enemyRoutes)) {
 		squadrons.push({
 			route,
 			shape: enemyShapes[i % enemyShapes.length],
@@ -98,8 +99,6 @@ function initWave(w: number) {
 	return squadrons;
 }
 
-
-// ToDo: random init squadrons
 
 export default {
 	squadrons: initWave(1)
