@@ -21,12 +21,12 @@ export class Game {
 		if (!ctx)
 			throw Error('Could not setup canvas');
 		this.gc = ctx;
-		this.time = Date.now();
+		this.time = performance.now();
 	}
 
 	loop(cb?: () => void) {
 		window.requestAnimationFrame(_ => {
-			let tBefore = Date.now();
+			let tBefore = performance.now();
 			this.step();
 			this.draw();
 			this.calcTime(tBefore);
@@ -47,7 +47,7 @@ export class Game {
 	}
 
 	calcTime(tBefore: number) {
-		let now = Date.now();
+		let now = performance.now();
 		let elapsed = now - this.time;
 		this.time = now;
 		this.fps = 1000 / elapsed;
